@@ -2,7 +2,7 @@
 title: "Class_08"
 author: "Anika Bhattacharjya (A15459876)"
 date: "10/21/2021"
-output: github_document
+output: pdf_document
 ---
 
 First up is clustering methods
