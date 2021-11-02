@@ -1,0 +1,17 @@
+---
+title: "Bimm143_github"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+## Move info from github to rstudio
+> Make changes in git hub
+> Commit on github
+> In rstudio click "Pull" to bring info from github to rstudio
