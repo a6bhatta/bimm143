@@ -1,7 +1,9 @@
 ---
 title: "Bimm 143 Class 11"
-output: html_document
+author: "Anika Bhattacharjya (A15459876)"
+output: pdf_document
 ---
+# Introduction to the RCSB Protein Data Bank (PDB)
 
 ```{r}
 db <- read.csv("Data Export Summary.csv",row.names=1)
@@ -20,25 +22,60 @@ X-Ray = 87.6%, EM = 4.92%
 
 > Q2: What proportion of structures in the PDB are protein?
 
-STILL NEED TO ANSWER
+```{r}
+column.sums <- rowSums(db[ ,c(1:5)])
+column.sums
+```
 
 ```{r}
-column.sums <- rowSums(db)
-column.sums
-column.sums/method.sums["Total"]
+column.sums/method.sums["Total"]*100
 ```
+
+87% of PDB structures are protein only, 97% of the structures contain some protein.
 
 > Q3: Type HIV in the PDB website search box on the home page and determine how many HIV-1 protease structures are in the current PDB?
 
-STILL NEED TO ANSWER
+There are 83790 structures that result when I search for HIV-1 protease structures.
+
+# Visualizing the HIV-1 protease structure
 
 > Q4: Water molecules normally have 3 atoms. Why do we see just one atom per water molecule in this structure?
 
-We just see the oxygen atom in the water molecule because the hydrogen atom is smaller than the smallest representation VMD can provide.
+We just see the oxygen atom in the water molecule because the size of a hydrogen atom is smaller than the smallest representation VMD can provide.
 
 > Q5: There is a conserved water molecule in the binding site. Can you identify this water molecule? What residue number does this water molecule have (see note below)?
+
+The water molecule is on residue 308.
 
 ## VMD structure visualization image
 
 ![](vmdscene.png)
 
+# Introduction to Bio3D in R
+
+```{r}
+# load the library
+library(bio3d)
+
+pdb <- read.pdb("1hsg")
+pdb
+```
+```{r}
+aa123(pdbseq(pdb))
+```
+```{r}
+# ATOM records
+head(pdb$atom)
+```
+
+> Q7: How many amino acid residues are there in this pdb object?
+
+198
+
+> Q8: Name one of the two non-protein residues?
+ 
+ HOH
+ 
+ > Q9: How many protein chains are in this structure?
+ 
+ 2
