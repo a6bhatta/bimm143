@@ -1,0 +1,39 @@
+---
+title: "BIMM 143 Class 13"
+author: "Anika Bhattacharjya (A15459876)"
+output: pdf_document
+---
+
+# Read Zebrafish TSV File
+
+```{r}
+b <- read.delim("mm-second.x.zebrafish.tsv")
+head(b)
+```
+
+Assign column names 
+```{r}
+colnames(b) <- c("qseqid", "sseqid", "pident", "length", "mismatch", "gapopen", "qstart", "qend", "sstart", "send", "evalue", "bitscore")
+```
+
+Make a Histogram
+```{r}
+hist(b$bitscore)
+```
+Making plots of the data
+```{r}
+plot(b$pident  * (b$qend - b$qstart), b$bitscore)
+```
+Use ggplot for better plot
+```{r}
+library(ggplot2)
+ggplot(b, aes(pident, bitscore)) + geom_point(alpha=0.1) 
+
+```
+
+```{r}
+ggplot(b, aes((b$pident * (b$qend - b$qstart)), bitscore)) + geom_point(alpha=0.1) + geom_smooth()
+
+```
+
+

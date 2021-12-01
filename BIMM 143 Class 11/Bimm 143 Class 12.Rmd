@@ -1,9 +1,36 @@
 ---
-title: "Bimm 143 Class 12"
+title: "Bimm 143 Class 12: Structural Bioinformatics Part 2"
 author: "Anika Bhattacharjya (PID: A15459876)"
-output: html_document
+output: pdf_document
 ---
+# Introduction to Bio3D in R
 
+```{r}
+# load the library
+library(bio3d)
+
+pdb <- read.pdb("1hsg")
+pdb
+```
+```{r}
+aa123(pdbseq(pdb))
+```
+```{r}
+# ATOM records
+head(pdb$atom)
+```
+> Q7: How many amino acid residues are there in this pdb object?
+
+198
+
+> Q8: Name one of the two non-protein residues?
+ 
+ HOH
+ 
+ > Q9: How many protein chains are in this structure?
+ 
+ 2
+ 
 # Comparative Analysis of Protein Structures
 ```{r}
 library(bio3d)
@@ -27,10 +54,29 @@ mktrj(modes, file="nma.pdb")
 Upload image of nma.pdb
 ![](nmapdb.png)
 # Analysis of ADK
+
+> Q10. Which of the packages above is found only on BioConductor and not CRAN?
+
+"msa"
+
+> Q11. Which of the above packages is not found on BioConductor or CRAN?
+
+The packages that are downloaded from GitHub or Bitbucket are not on Bioconductor or CRAN. In this case it is "Grantlab/bio3d-view" from bitbucket
+
+> Q12. True or False? Functions from the devtools package can be used to install packages from GitHub and BitBucket?
+
+TRUE
+
+Search and Retreive ADK structures
 ```{r}
 aa <- get.seq("1ake_A")
 
 ```
+
+> Q13. How many amino acids are in this sequence, i.e. how long is this sequence?
+
+214
+
 ```{r}
 # List out some 'top hits'
 hits <- NULL
@@ -77,6 +123,7 @@ pc1 <- mktrj(pc.xray, pc=1, file="pc_1.pdb")
 ```
 
 ![](pc_1_pdb.png)
+
 # Find a gene VMD file:CATF845.fwd CATF
 
 ![](findagene.png)

@@ -193,10 +193,17 @@ Summarize results
 summary(res)
 ```
 Customize results table
+Focus in on genes with a small p-value (significant change)
 ```{r}
 res05 <- results(dds, alpha=0.05)
 summary(res05)
 ```
+# Save our results
+Write out whole results data set (including genes that don't change significantly)
+```{r}
+write.csv(res, file="allmyresults.csv")
+```
+
 # Data Visualization
 Volcano plots
 
@@ -233,5 +240,90 @@ plot( res$log2FoldChange,  -log(res$padj),
 abline(v=c(-2,2), col="gray", lty=2)
 abline(h=-log(0.1), col="gray", lty=2)
 ```
+
+# Add Annotation data
+
+We need two bioconductor packages
+```{r}
+library("AnnotationDbi")
+library("org.Hs.eg.db")
+```
+```{r}
+columns(org.Hs.eg.db)
+```
+We will use `mapIDs` function to translate between identifiers from different data bases
+```{r}
+res$symbol <- mapIds(org.Hs.eg.db,
+                     keys=row.names(res), # Our gene names
+                     keytype="ENSEMBL",        # The format of our gene names
+                     column="SYMBOL",          # The new format we want to add
+                     multiVals="first")
+```
+```{r}
+head(res)
+```
+
+# Enhanced Volcano Plots
+
+Download didn't work, Professor Grant said to skip this section.
+
+# Pathway Analysis
+```{r}
+library(pathview)
+library(gage)
+library(gageData)
+
+```
+```{r}
+res$entrez <- mapIds(org.Hs.eg.db,
+                     keys=row.names(res), 
+                     keytype="ENSEMBL",        
+                     column="ENTREZID",          
+                     multiVals="first")
+```
+```{r}
+head(res)
+```
+Load Kegg data set
+```{r}
+data(kegg.sets.hs)
+```
+```{r}
+# Examine the first 2 pathways in this kegg set for humans
+head(kegg.sets.hs, 2)
+```
+The main **gage()** function requires a named vector of fold changes, where the names of the values are the Entrez gene IDs
+```{r}
+foldchange <- res$log2FoldChange
+names(foldchange) <- res$entrez
+
+head(foldchange)
+```
+```{r}
+# Get the results
+keggres = gage(foldchange, gsets=kegg.sets.hs)
+```
+```{r}
+attributes(keggres)
+```
+This separates results by "greater" and "less"
+```{r}
+# Look at the first three down (less) pathways
+head(keggres$less, 3)
+```
+```{r}
+pathview(gene.data=foldchange, pathway.id="hsa05310")
+
+```
+![](hsa05310.pathview.png)
+
+
+
+
+
+
+
+
+
 
 
