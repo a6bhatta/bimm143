@@ -1,0 +1,176 @@
+---
+title: "Class_08"
+author: "Anika Bhattacharjya (A15459876)"
+date: "10/21/2021"
+output: pdf_document
+---
+
+First up is clustering methods
+
+#Kmeans clustering
+
+The function in base R to do Kmeans clustering is called 'kmeans()'
+
+First make up some data where we know what the answer should be:
+
+```{r}
+tmp <- c(rnorm(30,-3), rnorm(30,3))
+x <- cbind(x=tmp, y=rev(tmp))
+x
+plot(x)
+```
+
+> Q. Can we use kmeans to cluster this data setting k 2 and nstart to 20
+
+```{r}
+km <- kmeans(x, centers=2, nstart=20)
+km
+```
+
+> Q. How many points are in each cluster?
+
+```{r}
+km$size
+```
+
+> Q. What 'component' of your result object details cluster assignment/membership?
+
+```{r}
+km$cluster
+```
+
+> What 'component' of your result object details cluster centers?
+
+```{r}
+km$centers
+```
+
+
+> Q. Plot x colored by the kmeans cluster assignment and add cluser centers as blue points
+
+```{r}
+plot(x, col= km$cluster)
+points(km$centers, col="blue", pch=15, cex=2)
+```
+
+Analyze same data with hclust()
+
+```{r}
+hc <- hclust (dist(x))
+hc
+```
+
+There is a plot method for hclust result object
+```{r}
+plot(hc)
+```
+
+To get our cluster membership vector we need to do a little more work. We have to "cut" the tree where we think it makes sense. For this we use `cutree()` function.
+
+```{r}
+cutree(hc, h = 6)
+```
+ You can also call `cutree()` setting k = numner of grps/clusters you want.
+ 
+```{r}
+cutree(hc, k=2)
+```
+ 
+ Make our results plot
+ 
+```{r}
+grps <- cutree(hc,k=2)
+plot(x, col=grps)
+```
+ 
+#PCA of UK food data
+
+> import data
+
+```{r}
+url <- "https://tinyurl.com/UK-foods"
+x <- read.csv(url)
+```
+
+> Q1. How many rows and columns are in your new data frame named x? What R functions could you use to answer this questions?
+
+```{r}
+dim(x)
+```
+
+> Checking your data
+
+Preview first 6 rows
+
+```{r}
+x
+```
+
+Row-names are incorrectly set as the first column of our x data fram. Use minus indexing as one option.
+```{r}
+rownames(x) <- x[,1]
+x <- x[,-1]
+head(x)
+```
+ There is a problem here because if we keep inputing the function it takes a column away each time.
+
+Another method:
+```{r}
+x <- read.csv(url, row.names=1)
+head (x)
+```
+```{r}
+dim(x)
+```
+
+Now we have correct dimensions
+> Q2. Which approach to solving the ‘row-names problem’ mentioned above do you prefer and why? Is one approach more robust than another under certain circumstances?
+
+The second option is the better option because it doesn't keep taking away columns.
+
+Plot the data 
+```{r}
+barplot(as.matrix(x), beside=T, col=rainbow(nrow(x)))
+```
+
+> Q3: Changing what optional argument in the above barplot() function results in the following plot?
+
+Set beside to false
+```{r}
+barplot(as.matrix(x), beside=F, col=rainbow(nrow(x)))
+```
+
+> Q5: Generating all pairwise plots may help somewhat. Can you make sense of the following code and resulting figure? What does it mean if a given point lies on the diagonal for a given plot?
+
+```{r}
+pairs(x, col=rainbow(10), pch=16)
+```
+
+> Q6. What is the main differences between N. Ireland and the other countries of the UK in terms of this data-set?
+
+Can't really tell the difference at this point the way the data is presented.
+
+Use PCA Funtion
+```{r}
+# Use the prcomp() PCA function
+pca <- prcomp(t(x))
+summary(pca)
+```
+
+> Q7. Complete the code below to generate a plot of PC1 vs PC2. The second line adds text labels over the data points.
+
+```{r}
+#Plot PC1 vs PC2
+colors <- c("red", "Orange", "Green", "Blue")
+plot(pca$x[,1], pca$x[,2])
+text(pca$x[,1], pca$x[,2], colnames(x), col= colors)
+```
+
+Variable Loadings!
+
+```{r}
+# Focus on PC1 as it accounts for > 90% of variance
+par(mar=c(10, 3, 0.35, 0))
+barplot(pca$rotation[,1], las=2)
+```
+
