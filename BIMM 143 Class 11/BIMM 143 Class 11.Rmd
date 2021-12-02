@@ -1,6 +1,6 @@
 ---
 title: "Bimm 143 Class 11"
-author: "Anika Bhattacharjya (A15459876)"
+author: "Anika Bhattacharjya (PID: A15459876)"
 output: pdf_document
 ---
 # Introduction to the RCSB Protein Data Bank (PDB)
